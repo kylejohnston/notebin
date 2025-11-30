@@ -13,7 +13,7 @@ const STORAGE_KEYS = {
 
 // Default values
 const DEFAULTS = {
-    TEXT_SIZE: 20,
+    TEXT_SIZE: 24,
     MIN_TEXT_SIZE: 16, // Prevents iOS Safari auto-zoom on focus
     MAX_TEXT_SIZE: 32,
     TEXT_SIZE_INCREMENT: 2

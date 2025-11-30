@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="currentColor-translucent">
     <meta name="apple-mobile-web-app-title" content="notebin">
@@ -105,14 +105,11 @@
         </div>
     </div>
 
-    <!-- Dev indicator (text size) -->
-    <div class="dev-indicator" x-text="`${textSize}px`"></div>
-
     <script src="app.js"></script>
     <script>
         // Register service worker (DISABLED FOR DEVELOPMENT)
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
+            navigator.serviceWorker.register('/notebin/sw.js')
                 .then((registration) => {
                     console.log('Service Worker registered:', registration);
                 })

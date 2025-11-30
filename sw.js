@@ -1,11 +1,11 @@
 // Service Worker for offline functionality
-const CACHE_NAME = 'notebin-v1';
+const CACHE_NAME = 'notebin-v2';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/app.js',
-  '/manifest.json'
+  '/notebin/',
+  '/notebin/index.html',
+  '/notebin/style.css',
+  '/notebin/app.js',
+  '/notebin/manifest.json'
 ];
 
 // Install event - cache resources

@@ -2,7 +2,7 @@
   "name": "notebin",
   "short_name": "notebin",
   "description": "Quick, transitory note-taking",
-  "start_url": "/",
+  "start_url": "/notebin/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
