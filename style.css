@@ -1,0 +1,294 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Light mode (default) */
+    --bg-color: #fafafa;
+    --text-color: #121212;
+    --menu-bg: #fafafa;
+    --menu-border: #e0e0e0;
+    --scrim-bg: rgba(0, 0, 0, 0.3);
+    --control-bg: #f0f0f0;
+    --control-active: #8888ff;
+    --control-text: #121212;
+}
+
+body.dark {
+    --bg-color: #1a1a1a;
+    --text-color: #fafafa;
+    --menu-bg: #2a2a2a;
+    --menu-border: #404040;
+    --scrim-bg: rgba(0, 0, 0, 0.6);
+    --control-bg: #3a3a3a;
+    --control-active: #8888ff;
+    --control-text: #fafafa;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    /* iOS safe area support */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+}
+
+/* Menu trigger button */
+.menu-trigger {
+    position: fixed;
+    top: calc(20px + env(safe-area-inset-top));
+    right: calc(20px + env(safe-area-inset-right));
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    z-index: 100;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.menu-trigger:hover,
+.menu-trigger:active {
+    opacity: 1;
+}
+
+/* Note textarea */
+.note-area {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    background: transparent;
+    color: var(--text-color);
+    font-family: inherit;
+    padding: 20px;
+    padding-top: calc(60px + env(safe-area-inset-top));
+    -webkit-appearance: none;
+    -webkit-text-size-adjust: 100%;
+}
+
+.note-area::placeholder {
+    color: transparent;
+}
+
+/* Scrim overlay */
+.scrim {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--scrim-bg);
+    z-index: 200;
+}
+
+/* Menu panel */
+.menu-panel {
+    position: fixed;
+    top: calc(60px + env(safe-area-inset-top));
+    right: calc(20px + env(safe-area-inset-right));
+    background: var(--menu-bg);
+    border: 1px solid var(--menu-border);
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 280px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    z-index: 300;
+}
+
+/* Menu transitions */
+.menu-enter {
+    transition: all 0.2s ease-out;
+}
+
+.menu-enter-start {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.menu-enter-end {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.menu-leave {
+    transition: all 0.15s ease-in;
+}
+
+.menu-leave-start {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.menu-leave-end {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+/* Menu items */
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+}
+
+.menu-item:last-of-type {
+    border-bottom: none;
+}
+
+.menu-label {
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.menu-controls {
+    display: flex;
+    gap: 8px;
+}
+
+/* Control buttons */
+.control-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--control-bg);
+    border: none;
+    color: var(--control-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.control-btn:active {
+    background: var(--control-active);
+    color: white;
+}
+
+/* Toggle button */
+.toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.toggle-track {
+    width: 60px;
+    height: 32px;
+    background: var(--control-bg);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    transition: background 0.2s;
+    position: relative;
+}
+
+.toggle-thumb {
+    width: 26px;
+    height: 26px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-btn.active .toggle-track {
+    background: var(--control-active);
+}
+
+.toggle-btn.active .toggle-thumb {
+    transform: translateX(28px);
+}
+
+/* Clear button */
+.clear-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--control-bg);
+    border: none;
+    color: var(--control-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.clear-btn:active {
+    background: var(--control-active);
+    color: white;
+}
+
+.clear-btn.confirm-state {
+    background: var(--control-active);
+    color: white;
+    animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Menu close */
+.menu-close {
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 16px;
+    cursor: pointer;
+    text-align: left;
+    opacity: 0.6;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.menu-close:active {
+    opacity: 1;
+}
+
+/* Dev indicator */
+.dev-indicator {
+    position: fixed;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    right: calc(10px + env(safe-area-inset-right));
+    font-size: 14px;
+    color: #cccccc;
+    pointer-events: none;
+    z-index: 1000;
+    font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+    .note-area {
+        /* Prevent iOS zoom on focus */
+        font-size: max(16px, 1em);
+    }
+}

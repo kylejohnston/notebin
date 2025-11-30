@@ -1,0 +1,224 @@
+// Configure LocalForage
+localforage.config({
+    name: 'notebin',
+    storeName: 'notes'
+});
+
+// Storage keys
+const STORAGE_KEYS = {
+    NOTE_CONTENT: 'noteContent',
+    TEXT_SIZE: 'textSize',
+    COLOR_MODE: 'colorModeOverride'
+};
+
+// Default values
+const DEFAULTS = {
+    TEXT_SIZE: 20,
+    MIN_TEXT_SIZE: 16, // Prevents iOS Safari auto-zoom on focus
+    MAX_TEXT_SIZE: 32,
+    TEXT_SIZE_INCREMENT: 2
+};
+
+function noteApp() {
+    return {
+        noteContent: '',
+        textSize: DEFAULTS.TEXT_SIZE,
+        colorModeOverride: null, // null = system, 'light' or 'dark' = override
+        colorMode: 'light', // computed: 'light' or 'dark'
+        menuOpen: false,
+        clearConfirmPending: false,
+        clearConfirmTimeout: null,
+
+        async init() {
+            // Load saved data
+            await this.loadNote();
+            await this.loadTextSize();
+            await this.loadColorMode();
+
+            // Set initial color mode
+            this.updateColorMode();
+
+            // Listen for system color scheme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                this.updateColorMode();
+            });
+
+            // Auto-focus logic: focus if note is empty
+            this.$nextTick(() => {
+                if (!this.noteContent || this.noteContent.trim() === '') {
+                    this.$refs.textarea.focus();
+                }
+            });
+        },
+
+        async loadNote() {
+            try {
+                const saved = await localforage.getItem(STORAGE_KEYS.NOTE_CONTENT);
+                if (saved !== null) {
+                    this.noteContent = saved;
+                }
+            } catch (err) {
+                console.error('Error loading note:', err);
+            }
+        },
+
+        async saveNote() {
+            try {
+                await localforage.setItem(STORAGE_KEYS.NOTE_CONTENT, this.noteContent);
+            } catch (err) {
+                console.error('Error saving note:', err);
+            }
+        },
+
+        async loadTextSize() {
+            try {
+                const saved = await localforage.getItem(STORAGE_KEYS.TEXT_SIZE);
+                if (saved !== null) {
+                    this.textSize = saved;
+                }
+            } catch (err) {
+                console.error('Error loading text size:', err);
+            }
+        },
+
+        async saveTextSize() {
+            try {
+                await localforage.setItem(STORAGE_KEYS.TEXT_SIZE, this.textSize);
+            } catch (err) {
+                console.error('Error saving text size:', err);
+            }
+        },
+
+        increaseTextSize() {
+            if (this.textSize < DEFAULTS.MAX_TEXT_SIZE) {
+                this.textSize += DEFAULTS.TEXT_SIZE_INCREMENT;
+                this.saveTextSize();
+            }
+        },
+
+        decreaseTextSize() {
+            if (this.textSize > DEFAULTS.MIN_TEXT_SIZE) {
+                this.textSize -= DEFAULTS.TEXT_SIZE_INCREMENT;
+                this.saveTextSize();
+            }
+        },
+
+        async loadColorMode() {
+            try {
+                const saved = await localforage.getItem(STORAGE_KEYS.COLOR_MODE);
+                if (saved !== null) {
+                    this.colorModeOverride = saved;
+                }
+            } catch (err) {
+                console.error('Error loading color mode:', err);
+            }
+        },
+
+        async saveColorMode() {
+            try {
+                await localforage.setItem(STORAGE_KEYS.COLOR_MODE, this.colorModeOverride);
+            } catch (err) {
+                console.error('Error saving color mode:', err);
+            }
+        },
+
+        updateColorMode() {
+            if (this.colorModeOverride !== null) {
+                // User has set an override
+                this.colorMode = this.colorModeOverride;
+            } else {
+                // Follow system preference
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                this.colorMode = prefersDark ? 'dark' : 'light';
+            }
+
+            // Update theme-color meta tag for iOS status bar
+            this.updateThemeColor();
+        },
+
+        updateThemeColor() {
+            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if (metaThemeColor) {
+                // Match the background colors from CSS
+                const themeColor = this.colorMode === 'dark' ? '#1a1a1a' : '#fafafa';
+                metaThemeColor.setAttribute('content', themeColor);
+            }
+        },
+
+        toggleColorMode() {
+            if (this.colorModeOverride === null) {
+                // Currently following system, set override to opposite of current
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                this.colorModeOverride = systemPrefersDark ? 'light' : 'dark';
+            } else {
+                // Currently overridden, toggle back to system
+                this.colorModeOverride = null;
+            }
+
+            this.updateColorMode();
+            this.saveColorMode();
+        },
+
+        toggleMenu() {
+            this.menuOpen = !this.menuOpen;
+
+            // Reset clear confirmation state when opening menu
+            if (this.menuOpen) {
+                this.clearConfirmPending = false;
+                if (this.clearConfirmTimeout) {
+                    clearTimeout(this.clearConfirmTimeout);
+                    this.clearConfirmTimeout = null;
+                }
+            }
+        },
+
+        closeMenu() {
+            this.menuOpen = false;
+            this.clearConfirmPending = false;
+            if (this.clearConfirmTimeout) {
+                clearTimeout(this.clearConfirmTimeout);
+                this.clearConfirmTimeout = null;
+            }
+        },
+
+        handleClear() {
+            if (this.clearConfirmPending) {
+                // Second tap - actually clear the note
+                this.clearNote();
+            } else {
+                // First tap - enter confirm state
+                this.clearConfirmPending = true;
+
+                // Reset after 3 seconds if no second tap
+                this.clearConfirmTimeout = setTimeout(() => {
+                    this.clearConfirmPending = false;
+                }, 3000);
+            }
+        },
+
+        async clearNote() {
+            try {
+                // Clear the note content
+                this.noteContent = '';
+                await localforage.setItem(STORAGE_KEYS.NOTE_CONTENT, '');
+
+                // Reset confirmation state
+                this.clearConfirmPending = false;
+                if (this.clearConfirmTimeout) {
+                    clearTimeout(this.clearConfirmTimeout);
+                    this.clearConfirmTimeout = null;
+                }
+
+                // Close menu
+                this.closeMenu();
+
+                // Focus textarea (since it's now empty)
+                this.$nextTick(() => {
+                    this.$refs.textarea.focus();
+                });
+            } catch (err) {
+                console.error('Error clearing note:', err);
+            }
+        }
+    };
+}
