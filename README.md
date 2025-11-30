@@ -80,14 +80,11 @@ notebin/
 - Notes save automatically as you type
 
 ### Menu Controls
-- Tap the ribbon icon (top right) to open the menu
-- **Text size**: Use ^ and v buttons to adjust
+- Tap the icon (top right) to open the menu
+- **Text size**: Use - and + buttons to adjust
 - **Color mode**: Toggle between system/light/dark modes
 - **Clear note**: Tap once, then tap again to confirm deletion
-- **Close**: Tap "× Close" or tap outside the menu
-
-### Text Size (Dev Mode)
-The current text size is displayed in the bottom right corner (14px, #ccc). This is for development/testing and can be removed by deleting the `.dev-indicator` element from `index.html`.
+- **Close**: Tap outside the menu
 
 ## Technical Details
 
@@ -104,26 +101,10 @@ The current text size is displayed in the bottom right corner (14px, #ccc). This
 - iOS Safari 13+
 - Modern browsers with PWA support
 
-## Removing Dev Features
-
-To prepare for production, remove the dev text size indicator:
-
-**In `index.html`:**
-```html
-<!-- Remove this element -->
-<div class="dev-indicator" x-text="`${textSize}px`"></div>
-```
-
-**In `style.css`:**
-```css
-/* Remove this entire rule */
-.dev-indicator { ... }
-```
-
 ## Customization
 
 ### Default Text Size
-Edit `DEFAULTS.TEXT_SIZE` in `app.js` (currently 20px)
+Edit `DEFAULTS.TEXT_SIZE` in `app.js` (currently 24px)
 
 ### Text Size Range
 Edit `DEFAULTS.MIN_TEXT_SIZE` and `DEFAULTS.MAX_TEXT_SIZE` in `app.js`
@@ -135,13 +116,13 @@ Edit the `line-height` value in the textarea style attribute in `index.html` (cu
 Edit CSS custom properties in `style.css`:
 ```css
 :root {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-  --control-active: #ff7f7f;
+  --bg-color: #fafafa;
+  --text-color: #121212;
+  --control-active: #8888ff;
   /* etc. */
 }
 ```
 
 ## License
 
-This is a personal project. Use freely.
+This is a personal, just-for-me project. Use freely, ymmv
