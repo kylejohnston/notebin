@@ -7,7 +7,7 @@ A fast, minimal, single-note web app for iOS Safari. Perfect for quick, transito
 - **Single note** - One note at a time, auto-saves as you type
 - **Smart keyboard** - Auto-focuses when note is empty, waits for tap when content exists
 - **LocalStorage** - All data stored locally in IndexedDB (iOS Safari compatible)
-- **Text sizing** - Adjustable text size (14px - 32px)
+- **Text sizing** - Adjustable text size (16px - 32px)
 - **Light/dark mode** - Follows system preference with manual override
 - **PWA ready** - Install to iOS home screen for app-like experience
 - **Offline-first** - Works without internet connection
