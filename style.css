@@ -162,6 +162,10 @@ body {
     color: var(--text-color);
 }
 
+.text-size-value {
+    opacity: 0.64;
+}
+
 .menu-controls {
     display: flex;
     gap: 8px;
