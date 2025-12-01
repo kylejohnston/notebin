@@ -110,7 +110,7 @@ body {
     background: var(--menu-bg);
     border: 1px solid var(--menu-border);
     border-radius: 12px;
-    padding: 20px;
+    padding: 4px 16px;
     min-width: 280px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     z-index: 300;
@@ -160,6 +160,10 @@ body {
 .menu-label {
     font-size: 16px;
     color: var(--text-color);
+}
+
+.text-size-value {
+    opacity: 0.64;
 }
 
 .menu-controls {
