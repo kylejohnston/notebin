@@ -69,26 +69,33 @@ body {
     opacity: 1;
 }
 
-/* Note textarea */
+/* Note area */
 .note-area {
     width: 100%;
     height: 100%;
     border: none;
     outline: none;
-    resize: none;
     background: transparent;
     color: var(--text-color);
     font-family: inherit;
     padding: 20px;
     padding-top: calc(60px + env(safe-area-inset-top));
+    overflow-y: auto;
+    overflow-x: hidden;
+    word-wrap: break-word;
     -webkit-appearance: none;
     -webkit-text-size-adjust: 100%;
     /* Disable double-tap zoom */
     touch-action: manipulation;
+    /* Line height for text */
+    line-height: 1.3;
+    white-space: pre-wrap;
 }
 
-.note-area::placeholder {
-    color: transparent;
+/* Paragraph spacing - add margin between line breaks */
+/* Note: line-height inherited from parent .note-area */
+.note-area > div + div {
+    margin-top: 8px;
 }
 
 /* Scrim overlay */
@@ -298,5 +305,12 @@ body {
     .note-area {
         /* Prevent iOS zoom on focus */
         font-size: max(16px, 1em);
+    }
+}
+
+/* Ensure proper caret color on mobile */
+@media screen and (max-width: 767px) {
+    .note-area {
+        caret-color: var(--text-color);
     }
 }
