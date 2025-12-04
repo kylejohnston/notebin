@@ -43,8 +43,11 @@ function noteApp() {
                 this.updateColorMode();
             });
 
-            // Auto-focus logic: focus if note is empty
+            // Set initial content in contenteditable div
             this.$nextTick(() => {
+                this.updateContentEditableContent();
+
+                // Auto-focus logic: focus if note is empty
                 if (!this.noteContent || this.noteContent.trim() === '') {
                     this.$refs.textarea.focus();
                 }
@@ -59,6 +62,27 @@ function noteApp() {
                 }
             } catch (err) {
                 console.error('Error loading note:', err);
+            }
+        },
+
+        handleInput(event) {
+            // Get plain text content from contenteditable div
+            this.noteContent = this.$refs.textarea.innerText || '';
+            this.saveNote();
+        },
+
+        updateContentEditableContent() {
+            // Update the contenteditable div with saved content
+            if (this.$refs.textarea) {
+                // Convert plain text to HTML with proper line breaks
+                const lines = this.noteContent.split('\n');
+                this.$refs.textarea.innerHTML = '';
+
+                lines.forEach((line, index) => {
+                    const div = document.createElement('div');
+                    div.textContent = line || '\u200B'; // Use zero-width space for empty lines
+                    this.$refs.textarea.appendChild(div);
+                });
             }
         },
 
@@ -201,6 +225,11 @@ function noteApp() {
                 // Clear the note content
                 this.noteContent = '';
                 await localforage.setItem(STORAGE_KEYS.NOTE_CONTENT, '');
+
+                // Clear the contenteditable div
+                if (this.$refs.textarea) {
+                    this.$refs.textarea.innerHTML = '';
+                }
 
                 // Reset confirmation state
                 this.clearConfirmPending = false;

@@ -27,15 +27,19 @@
         </svg>
     </button>
 
-    <!-- Note textarea -->
-    <textarea
+    <!-- Note area -->
+    <div
         x-ref="textarea"
-        x-model="noteContent"
-        @input="saveNote()"
-        placeholder=""
-        :style="`font-size: ${textSize}px; line-height: 1.3;`"
+        contenteditable="true"
+        @input="handleInput($event)"
+        @blur="saveNote()"
+        :style="`font-size: ${textSize}px;`"
         class="note-area"
-    ></textarea>
+        role="textbox"
+        aria-multiline="true"
+        spellcheck="true"
+        autocorrect="on"
+    ></div>
 
     <!-- Menu overlay -->
     <div
