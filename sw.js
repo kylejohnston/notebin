@@ -1,5 +1,5 @@
 // Service Worker for offline functionality
-const CACHE_NAME = 'notebin-v3';
+const CACHE_NAME = 'notebin-v4';
 const urlsToCache = [
   '/notebin/',
   '/notebin/index.html',
