@@ -29,13 +29,14 @@
 
     <!-- Note area -->
     <div
-        x-ref="textarea"
+        x-ref="noteArea"
         contenteditable="true"
         @input="handleInput($event)"
         @blur="saveNote()"
         :style="`font-size: ${textSize}px;`"
         class="note-area"
         role="textbox"
+        aria-label="Note content"
         aria-multiline="true"
         spellcheck="true"
         autocorrect="on"

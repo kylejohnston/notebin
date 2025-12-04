@@ -92,18 +92,8 @@ body {
     white-space: pre-wrap;
 }
 
-/* Empty state placeholder */
-.note-area:empty::before {
-    content: attr(data-placeholder);
-    color: transparent;
-    pointer-events: none;
-}
-
 /* Paragraph spacing - add margin between line breaks */
-.note-area > div {
-    line-height: 1.3;
-}
-
+/* Note: line-height inherited from parent .note-area */
 .note-area > div + div {
     margin-top: 8px;
 }

@@ -49,7 +49,7 @@ function noteApp() {
 
                 // Auto-focus logic: focus if note is empty
                 if (!this.noteContent || this.noteContent.trim() === '') {
-                    this.$refs.textarea.focus();
+                    this.$refs.noteArea.focus();
                 }
             });
         },
@@ -67,21 +67,34 @@ function noteApp() {
 
         handleInput(event) {
             // Get plain text content from contenteditable div
-            this.noteContent = this.$refs.textarea.innerText || '';
-            this.saveNote();
+            // Note: We rely on the @blur event to trigger saveNote() to avoid redundant saves
+            this.noteContent = this.$refs.noteArea.innerText || '';
         },
 
         updateContentEditableContent() {
             // Update the contenteditable div with saved content
-            if (this.$refs.textarea) {
+            // SECURITY: Uses textContent (not innerHTML) to prevent XSS when setting user content
+            if (this.$refs.noteArea) {
+                // Handle empty content: leave innerHTML empty to trigger CSS :empty pseudo-element
+                if (!this.noteContent || this.noteContent.trim() === '') {
+                    this.$refs.noteArea.innerHTML = '';
+                    return;
+                }
+
                 // Convert plain text to HTML with proper line breaks
                 const lines = this.noteContent.split('\n');
-                this.$refs.textarea.innerHTML = '';
+                this.$refs.noteArea.innerHTML = '';
 
                 lines.forEach((line, index) => {
                     const div = document.createElement('div');
-                    div.textContent = line || '\u200B'; // Use zero-width space for empty lines
-                    this.$refs.textarea.appendChild(div);
+                    // Use <br> for empty lines instead of zero-width space to avoid content discrepancies
+                    if (line === '') {
+                        div.appendChild(document.createElement('br'));
+                    } else {
+                        // SECURITY: Always use textContent for user content to prevent XSS
+                        div.textContent = line;
+                    }
+                    this.$refs.noteArea.appendChild(div);
                 });
             }
         },
@@ -227,8 +240,8 @@ function noteApp() {
                 await localforage.setItem(STORAGE_KEYS.NOTE_CONTENT, '');
 
                 // Clear the contenteditable div
-                if (this.$refs.textarea) {
-                    this.$refs.textarea.innerHTML = '';
+                if (this.$refs.noteArea) {
+                    this.$refs.noteArea.innerHTML = '';
                 }
 
                 // Reset confirmation state
@@ -241,9 +254,9 @@ function noteApp() {
                 // Close menu
                 this.closeMenu();
 
-                // Focus textarea (since it's now empty)
+                // Focus note area (since it's now empty)
                 this.$nextTick(() => {
-                    this.$refs.textarea.focus();
+                    this.$refs.noteArea.focus();
                 });
             } catch (err) {
                 console.error('Error clearing note:', err);
