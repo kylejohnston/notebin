@@ -71,6 +71,22 @@ function noteApp() {
             this.noteContent = this.$refs.noteArea.innerText || '';
         },
 
+        handlePaste(event) {
+            // Prevent default paste behavior (which would insert HTML)
+            event.preventDefault();
+
+            // Get plain text from clipboard
+            const text = event.clipboardData.getData('text/plain');
+
+            // Insert plain text at cursor position
+            // execCommand maintains undo/redo and triggers proper events
+            document.execCommand('insertText', false, text);
+
+            // Note: No need to manually call saveNote() here because
+            // execCommand('insertText') triggers the @input event,
+            // which calls handleInput(), and saveNote() is called on @blur
+        },
+
         updateContentEditableContent() {
             // Update the contenteditable div with saved content
             // SECURITY: Uses textContent (not innerHTML) to prevent XSS when setting user content

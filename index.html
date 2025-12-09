@@ -33,6 +33,7 @@
         contenteditable="true"
         @input="handleInput($event)"
         @blur="saveNote()"
+        @paste="handlePaste($event)"
         :style="`font-size: ${textSize}px;`"
         class="note-area"
         role="textbox"
