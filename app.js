@@ -49,6 +49,15 @@ function noteApp() {
                 this.updateColorMode();
             });
 
+            // Listen for copy/cut events to show paste button
+            document.addEventListener('copy', () => {
+                this.showPasteButton();
+            });
+
+            document.addEventListener('cut', () => {
+                this.showPasteButton();
+            });
+
             // Set initial content in contenteditable div
             this.$nextTick(() => {
                 this.updateContentEditableContent();
