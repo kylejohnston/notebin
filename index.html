@@ -111,37 +111,6 @@
         </div>
     </div>
 
-    <!-- Floating action buttons -->
-    <div
-        class="floating-actions"
-        x-show="undoButtonVisible || pasteButtonVisible"
-        x-transition.opacity.duration.2000ms
-    >
-        <button
-            x-show="undoButtonVisible"
-            @click="handleUndo()"
-            class="action-btn"
-            aria-label="Undo"
-        >
-
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6H10.5C13.5376 6 16 8.46243 16 11.5C16 14.5376 13.5376 17 10.5 17H5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M6 3L3 6L6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </button>
-        <button
-            x-show="pasteButtonVisible"
-            @click="handlePasteButton()"
-            class="action-btn"
-            aria-label="Paste"
-        >
-        
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2"/>
-            </svg>
-        </button>
-    </div>
-
     <script src="app.js"></script>
     <script>
         // Register service worker (DISABLED FOR DEVELOPMENT)

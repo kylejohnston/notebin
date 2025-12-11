@@ -29,12 +29,6 @@ function noteApp() {
         clearConfirmPending: false,
         clearConfirmTimeout: null,
 
-        // Floating action buttons
-        undoButtonVisible: false,
-        pasteButtonVisible: false,
-        undoTimeout: null,
-        pasteTimeout: null,
-
         async init() {
             // Load saved data
             await this.loadNote();
@@ -47,15 +41,6 @@ function noteApp() {
             // Listen for system color scheme changes
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
                 this.updateColorMode();
-            });
-
-            // Listen for copy/cut events to show paste button
-            document.addEventListener('copy', () => {
-                this.showPasteButton();
-            });
-
-            document.addEventListener('cut', () => {
-                this.showPasteButton();
             });
 
             // Set initial content in contenteditable div
@@ -84,9 +69,6 @@ function noteApp() {
             // Get plain text content from contenteditable div
             // Note: We rely on the @blur event to trigger saveNote() to avoid redundant saves
             this.noteContent = this.$refs.noteArea.innerText || '';
-
-            // Show undo button when text changes
-            this.showUndoButton();
         },
 
         handlePaste(event) {
@@ -240,10 +222,6 @@ function noteApp() {
                     clearTimeout(this.clearConfirmTimeout);
                     this.clearConfirmTimeout = null;
                 }
-
-                // Hide floating action buttons when menu opens
-                this.hideUndoButton();
-                this.hidePasteButton();
             }
         },
 
@@ -254,10 +232,6 @@ function noteApp() {
                 clearTimeout(this.clearConfirmTimeout);
                 this.clearConfirmTimeout = null;
             }
-
-            // Hide floating action buttons
-            this.hideUndoButton();
-            this.hidePasteButton();
         },
 
         handleClear() {
@@ -302,82 +276,6 @@ function noteApp() {
                 });
             } catch (err) {
                 console.error('Error clearing note:', err);
-            }
-        },
-
-        showUndoButton() {
-            // Clear existing timeout
-            if (this.undoTimeout) {
-                clearTimeout(this.undoTimeout);
-                this.undoTimeout = null;
-            }
-
-            // Show button
-            this.undoButtonVisible = true;
-
-            // Set timeout to hide after 8 seconds
-            this.undoTimeout = setTimeout(() => {
-                this.undoButtonVisible = false;
-                this.undoTimeout = null;
-            }, 8000);
-        },
-
-        hideUndoButton() {
-            this.undoButtonVisible = false;
-            if (this.undoTimeout) {
-                clearTimeout(this.undoTimeout);
-                this.undoTimeout = null;
-            }
-        },
-
-        handleUndo() {
-            // Execute native undo
-            document.execCommand('undo');
-
-            // Reset timer to keep button visible
-            this.showUndoButton();
-        },
-
-        showPasteButton() {
-            // Clear existing timeout
-            if (this.pasteTimeout) {
-                clearTimeout(this.pasteTimeout);
-                this.pasteTimeout = null;
-            }
-
-            // Show button
-            this.pasteButtonVisible = true;
-
-            // Set timeout to hide after 8 seconds
-            this.pasteTimeout = setTimeout(() => {
-                this.pasteButtonVisible = false;
-                this.pasteTimeout = null;
-            }, 8000);
-        },
-
-        hidePasteButton() {
-            this.pasteButtonVisible = false;
-            if (this.pasteTimeout) {
-                clearTimeout(this.pasteTimeout);
-                this.pasteTimeout = null;
-            }
-        },
-
-        async handlePasteButton() {
-            try {
-                // Read text from clipboard
-                const text = await navigator.clipboard.readText();
-
-                // Insert text at cursor position (same as handlePaste)
-                document.execCommand('insertText', false, text);
-
-                // Hide button immediately after paste
-                this.hidePasteButton();
-            } catch (err) {
-                // Permission denied or clipboard API unavailable
-                console.log('Clipboard read failed:', err);
-                // Hide button on error
-                this.hidePasteButton();
             }
         }
     };
