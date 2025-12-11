@@ -269,6 +269,44 @@ body {
     50% { transform: scale(1.05); }
 }
 
+/* Floating action buttons */
+.floating-actions {
+    position: fixed;
+    bottom: calc(80px + env(safe-area-inset-bottom));
+    right: calc(20px + env(safe-area-inset-right));
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    z-index: 50;
+}
+
+/* Disable pointer events during fade out */
+.floating-actions[style*="display: none"] {
+    pointer-events: none;
+}
+
+.action-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--control-bg);
+    border: none;
+    color: var(--control-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.action-btn:active {
+    background: var(--control-active);
+    color: white;
+}
+
 /* Menu close */
 .menu-close {
     width: 100%;
