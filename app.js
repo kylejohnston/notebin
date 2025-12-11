@@ -283,6 +283,39 @@ function noteApp() {
             } catch (err) {
                 console.error('Error clearing note:', err);
             }
+        },
+
+        showUndoButton() {
+            // Clear existing timeout
+            if (this.undoTimeout) {
+                clearTimeout(this.undoTimeout);
+                this.undoTimeout = null;
+            }
+
+            // Show button
+            this.undoButtonVisible = true;
+
+            // Set timeout to hide after 8 seconds
+            this.undoTimeout = setTimeout(() => {
+                this.undoButtonVisible = false;
+                this.undoTimeout = null;
+            }, 8000);
+        },
+
+        hideUndoButton() {
+            this.undoButtonVisible = false;
+            if (this.undoTimeout) {
+                clearTimeout(this.undoTimeout);
+                this.undoTimeout = null;
+            }
+        },
+
+        handleUndo() {
+            // Execute native undo
+            document.execCommand('undo');
+
+            // Reset timer to keep button visible
+            this.showUndoButton();
         }
     };
 }
