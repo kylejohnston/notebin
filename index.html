@@ -111,6 +111,26 @@
         </div>
     </div>
 
+    <!-- Floating action buttons -->
+    <div
+        class="floating-actions"
+        x-show="undoButtonVisible || pasteButtonVisible"
+        x-transition.opacity.duration.2000ms
+    >
+        <button
+            x-show="undoButtonVisible"
+            @click="handleUndo()"
+            class="action-btn"
+            aria-label="Undo"
+        >U</button>
+        <button
+            x-show="pasteButtonVisible"
+            @click="handlePasteButton()"
+            class="action-btn"
+            aria-label="Paste"
+        >P</button>
+    </div>
+
     <script src="app.js"></script>
     <script>
         // Register service worker (DISABLED FOR DEVELOPMENT)
