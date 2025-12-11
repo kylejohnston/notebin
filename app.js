@@ -240,6 +240,10 @@ function noteApp() {
                     clearTimeout(this.clearConfirmTimeout);
                     this.clearConfirmTimeout = null;
                 }
+
+                // Hide floating action buttons when menu opens
+                this.hideUndoButton();
+                this.hidePasteButton();
             }
         },
 
@@ -250,6 +254,10 @@ function noteApp() {
                 clearTimeout(this.clearConfirmTimeout);
                 this.clearConfirmTimeout = null;
             }
+
+            // Hide floating action buttons
+            this.hideUndoButton();
+            this.hidePasteButton();
         },
 
         handleClear() {
