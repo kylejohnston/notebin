@@ -29,6 +29,12 @@ function noteApp() {
         clearConfirmPending: false,
         clearConfirmTimeout: null,
 
+        // Floating action buttons
+        undoButtonVisible: false,
+        pasteButtonVisible: false,
+        undoTimeout: null,
+        pasteTimeout: null,
+
         async init() {
             // Load saved data
             await this.loadNote();
