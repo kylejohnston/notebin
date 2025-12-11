@@ -75,6 +75,9 @@ function noteApp() {
             // Get plain text content from contenteditable div
             // Note: We rely on the @blur event to trigger saveNote() to avoid redundant saves
             this.noteContent = this.$refs.noteArea.innerText || '';
+
+            // Show undo button when text changes
+            this.showUndoButton();
         },
 
         handlePaste(event) {
