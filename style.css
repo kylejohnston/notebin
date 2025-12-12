@@ -78,8 +78,8 @@ body {
     background: transparent;
     color: var(--text-color);
     font-family: inherit;
-    padding: 20px;
-    padding-top: calc(60px + env(safe-area-inset-top));
+    padding: 24px;
+    padding-top: calc(72px + env(safe-area-inset-top));
     overflow-y: auto;
     overflow-x: hidden;
     word-wrap: break-word;
@@ -88,7 +88,7 @@ body {
     /* Disable double-tap zoom */
     touch-action: manipulation;
     /* Line height for text */
-    line-height: 1.3;
+    line-height: 1.1;
     white-space: pre-wrap;
 }
 

@@ -30,6 +30,9 @@ function noteApp() {
         clearConfirmTimeout: null,
 
         async init() {
+            // Set default paragraph separator to div for consistent line wrapping
+            document.execCommand('defaultParagraphSeparator', false, 'div');
+
             // Load saved data
             await this.loadNote();
             await this.loadTextSize();
@@ -91,9 +94,9 @@ function noteApp() {
             // Update the contenteditable div with saved content
             // SECURITY: Uses textContent (not innerHTML) to prevent XSS when setting user content
             if (this.$refs.noteArea) {
-                // Handle empty content: leave innerHTML empty to trigger CSS :empty pseudo-element
+                // Handle empty content: insert empty div so browser has structure to work with
                 if (!this.noteContent || this.noteContent.trim() === '') {
-                    this.$refs.noteArea.innerHTML = '';
+                    this.$refs.noteArea.innerHTML = '<div><br></div>';
                     return;
                 }
 
@@ -257,7 +260,7 @@ function noteApp() {
 
                 // Clear the contenteditable div
                 if (this.$refs.noteArea) {
-                    this.$refs.noteArea.innerHTML = '';
+                    this.$refs.noteArea.innerHTML = '<div><br></div>';
                 }
 
                 // Reset confirmation state
